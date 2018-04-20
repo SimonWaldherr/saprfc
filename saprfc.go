@@ -999,7 +999,7 @@ func (conn *Connection) PingAndAutoReconnect(interval time.Duration) *time.Ticke
 	ticker := time.NewTicker(interval)
 	go func() {
 		for range ticker.C {
-			if conn.Ping != nil {
+			if conn.Ping() != nil {
 				conn.Reopen()
 			}
 		}
