@@ -1,12 +1,8 @@
 // +build linux,cgo amd64,cgo
 
-/*
-gorfc wraps the SAP NetWeaver RFC library written in C.
-Its provides methods for maintaining a connection to an ABAP backend and calling remote enabled functions from Go.
-The functions of the library take and return Go data types.
-
-*/
-
+// gorfc wraps the SAP NetWeaver RFC library written in C.
+// Its provides methods for maintaining a connection to an ABAP backend and calling remote enabled functions from Go.
+// The functions of the library take and return Go data types.
 package saprfc
 
 /*
@@ -15,7 +11,7 @@ package saprfc
 #cgo linux CFLAGS: -DSAPwithUNICODE -D__NO_MATH_INLINES -DSAPwithTHREADS -DSAPonLIN
 #cgo linux CFLAGS: -O2 -minline-all-stringops -g -fno-strict-aliasing -fno-omit-frame-pointer
 #cgo linux CFLAGS: -m64 -fexceptions -funsigned-char -Wall -Wno-uninitialized -Wno-long-long
-#cgo linux CFLAGS: -Wcast-align -pthread -pipe
+#cgo linux CFLAGS: -Wcast-align -pthread -pipe -Wno-unused-variable
 
 #cgo linux CFLAGS: -I/usr/local/sap/nwrfcsdk/include
 #cgo linux LDFLAGS: -L/usr/local/sap/nwrfcsdk/lib -lsapnwrfc -lsapucum
@@ -285,7 +281,7 @@ func nWrapString(uc *C.SAP_UC, length C.int, strip bool) (result string, err err
 	if rc != C.RFC_OK {
 		return result, rfcError(errorInfo, "Failed wrapping a C string")
 	}
-	result = C.GoStringN(utf8str, length)
+	result = C.GoString(utf8str)
 	if strip {
 		result = strings.Trim(result, "\x00 ")
 		return
